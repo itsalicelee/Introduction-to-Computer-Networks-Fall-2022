@@ -1,0 +1,49 @@
+Connect to 127.0.0.1, using port number 4047
+Received the message from server:
+Please input a question for calculation
+Question: 1 + 1
+Get the answer from server: 2.0
+Do you wish to continue? (Y/N)
+Y
+Received the message from server:
+Please input a question for calculation
+Question: 2 - 4
+Get the answer from server: -2.0
+Do you wish to continue? (Y/N)
+Y
+Received the message from server:
+Please input a question for calculation
+Question: 3 * 5
+Get the answer from server: 15.0
+Do you wish to continue? (Y/N)
+Y
+Received the message from server:
+Please input a question for calculation
+Question: 4 / 2
+Get the answer from server: 2.0
+Do you wish to continue? (Y/N)
+Y
+Received the message from server:
+Please input a question for calculation
+Question: 1.5 * 3
+Get the answer from server: 4.5
+Do you wish to continue? (Y/N)
+Y
+Received the message from server:
+Please input a question for calculation
+Question: 7 - 7
+Get the answer from server: 0.0
+Do you wish to continue? (Y/N)
+Y
+Received the message from server:
+Please input a question for calculation
+Question: 6 / -2
+Get the answer from server: -3.0
+Do you wish to continue? (Y/N)
+Y
+Received the message from server:
+Please input a question for calculation
+Question: -8 / 4
+Get the answer from server: -2.0
+Do you wish to continue? (Y/N)
+N
