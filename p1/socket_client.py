@@ -8,8 +8,8 @@ with open('./b07303024_p1_client_result.log', 'w') as logFile:
     # Configure the server IP with its corrosponding port number
     # Specify the TCP connection type and make connection to the server
     # TODO start
-    # HOST, PORT = "127.0.0.1", 4047
-    HOST, PORT = "140.112.42.104", 7777
+    HOST, PORT = "127.0.0.1", 4047
+    # HOST, PORT = "140.112.42.104", 7777
     client_s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_s.connect((HOST, PORT))
     # TODO end

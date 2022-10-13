@@ -21,8 +21,8 @@ with open('./server_log.txt', 'w') as logFile:
     # (use "127.0.0.1" for localhost on local machine)
     # Create a socket and bind the socket to the address
     # TODO start
-    # HOST, PORT = "127.0.0.1", 4047
-    HOST, PORT = "140.112.42.104", 7777
+    HOST, PORT = "127.0.0.1", 4047
+    # HOST, PORT = "140.112.42.104", 7777
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((HOST, PORT))
     # TODO end
