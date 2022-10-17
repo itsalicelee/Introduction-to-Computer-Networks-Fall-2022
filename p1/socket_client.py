@@ -2,7 +2,7 @@ import socket
 import time
 
 with open('./b07303024_p1_client_result.log', 'w') as logFile:
-    # logFile.write("The Client is running..\n")
+    logFile.write("The Client is running..\n")
     logFile.flush()
 
     # Configure the server IP with its corrosponding port number
@@ -42,7 +42,7 @@ with open('./b07303024_p1_client_result.log', 'w') as logFile:
 
     # Close the socket
     # TODO start
-    logFile.write("N")
+    logFile.write("N\n")
     client_s.close()
     # TODO end
 logFile.close()

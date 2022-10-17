@@ -46,7 +46,7 @@ with open('./server_log.txt', 'w') as logFile:
                 # TODO end
 
                 while True:
-                    Client.send(b"Received the message from server:\nPlease input a question for calculation")
+                    Client.send(b"Received the message from server: Please input a question for calculation")
                     # Recieve the data from the client, and send the answer back to the client
                     # Ask if the client want to terminate the process
                     # Terminate the process or continue
@@ -55,7 +55,7 @@ with open('./server_log.txt', 'w') as logFile:
                     Client.send(("Question: " + message + "\n").encode())
                     # logFile.write("Question: " + message + "\n")
                     result = calculate(message)
-                    Client.send(("Get the answer from server: " + str(result) + "\n").encode())
+                    Client.send(("Answer: " + str(result) + "\n").encode())
                     Client.send("Do you wish to continue? (Y/N)".encode())
                     message = Client.recv(1000).decode()
                     Client.send((message + "\n").encode())
