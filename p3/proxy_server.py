@@ -9,6 +9,8 @@ if len(sys.argv) <= 1:
 TCPServerSocket = socket(AF_INET, SOCK_STREAM)
 # TODO start
 HOST, PORT = "127.0.0.1", 4047
+TCPServerSocket.bind((HOST, PORT))
+TCPServerSocket.listen(0)
 # TODO end
 
 while True:
@@ -21,7 +23,7 @@ while True:
 
     # Receive request from the client
     # TODO start
-    RecvMessage = TCPClientSocket.recv(2048).decode()
+    RecvMessage = TCPClientSocket.recv(2048).decode('utf-8')
     # TODO end
     print(RecvMessage)
 
@@ -47,7 +49,7 @@ while True:
         TCPClientSocket.send(("Content-Type:text/html\r\n\r\n").encode('utf-8'))
         # TODO start
         for i in range(0, len(DataInFile)):
-            TCPClientSocket.send(DataInFile[i].encode())
+            TCPClientSocket.send(DataInFile[i].encode('utf-8'))
         # TODO end
 
         print('Read from cache')
@@ -65,7 +67,13 @@ while True:
                 print("try to connect to the web_server")
                 # Connect the socket to the web server port
                 # TODO: start
-                
+                proxy_ip = sys.argv[1]
+                try:
+                    proxy_port = sys.argv[2]
+                except:
+                    proxy_port = 80
+                SocketOnProxyServer.connect((proxy_ip, proxy_port))
+                SocketOnProxyServer.sendall(RecvMessage.encode('utf-8'))
                 # TODO end
                 print("connected successfully")
 
@@ -78,6 +86,14 @@ while True:
 
                 # Read the response into buffer
                 # TODO start
+                buffer = b''
+                while 1:
+                    # receive data from web server
+                    data = SocketOnProxyServer.recv(8192)
+                    if (len(data) > 0):
+                        buffer += data
+                    else:
+                        break
                 # TODO end
 
                 # Create a new copy in the cache for the requested file
@@ -85,10 +101,14 @@ while True:
                 TmpFile = open(Filename, "w")
                 print("open the file successfully")
                 # TODO start
+                TCPClientSocket.send(buffer)
+                TmpFile.write(buffer)
+                TmpFile.close()
+                
                 # TODO end
-
             except:
                 print("Illegal request")
+            SocketOnProxyServer.close()
         else:
             # HTTP response message for file is not found
             # TODO start
