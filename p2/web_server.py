@@ -8,7 +8,7 @@ ServerSocket = socket(AF_INET, SOCK_STREAM)
 # Create a socket and bind the socket to the address
 # TODO start
 HOST = "127.0.0.1"
-PORT = 4046
+PORT = 4047
 ServerSocket.bind((HOST, PORT))
 ServerSocket.listen(0)
 # TODO end
