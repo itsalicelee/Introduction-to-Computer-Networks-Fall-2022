@@ -8,20 +8,20 @@ if len(sys.argv) <= 1:
 # Create a server socket, bind it to a port and start listening
 TCPServerSocket = socket(AF_INET, SOCK_STREAM)
 # TODO start
-HOST, PORT =
+HOST, PORT = "127.0.0.1", 4047
 # TODO end
 
 while True:
     # Strat receiving data from the client
     print('Ready to serve...')
     # TODO start
-    TCPClientSocket, Addr =
+    TCPClientSocket, Addr = TCPServerSocket.accept()
     # TODO end
     print('Received a connection from:', Addr)
 
     # Receive request from the client
     # TODO start
-    RecvMessage =
+    RecvMessage = TCPClientSocket.recv(2048).decode()
     # TODO end
     print(RecvMessage)
 
@@ -46,6 +46,8 @@ while True:
         TCPClientSocket.send(("HTTP/1.1 200 OK\r\n").encode('utf-8'))
         TCPClientSocket.send(("Content-Type:text/html\r\n\r\n").encode('utf-8'))
         # TODO start
+        for i in range(0, len(DataInFile)):
+            TCPClientSocket.send(DataInFile[i].encode())
         # TODO end
 
         print('Read from cache')
@@ -55,14 +57,15 @@ while True:
         if FileExist == "false":
             # Create a socket on the proxy server
             # TODO start
-            SocketOnProxyServer =
+            SocketOnProxyServer = socket(AF_INET, SOCK_STREAM)
             # TODO end
             HostName = Filename.replace("www.", "", 1)
             print("host name is " + HostName)
             try:
                 print("try to connect to the web_server")
                 # Connect the socket to the web server port
-                # TODO start
+                # TODO: start
+                
                 # TODO end
                 print("connected successfully")
 
@@ -89,6 +92,10 @@ while True:
         else:
             # HTTP response message for file is not found
             # TODO start
+            TCPClientSocket.send(("HTTP/1.1 404 Not Found\r\n").encode('utf-8'))
+            TCPClientSocket.send(("Content-Type: text/html; charset=utf-8\r\n").encode('utf-8'))
+            TCPClientSocket.send(("404 Not Found\r\n").encode('utf-8'))
+            
             # TODO end
 
     # Close the client sockets
@@ -97,4 +104,5 @@ while True:
 
 # Close the server socket
 # TODO start
+TCPServerSocket.close()
 # TODO end
