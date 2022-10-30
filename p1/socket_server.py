@@ -3,7 +3,7 @@ from datetime import datetime
 import math
 
 def fact(x):
-    if x == 1:
+    if x == 1 or x == 0:
         return 1
     else:
         return (x * fact(x-1))
@@ -19,6 +19,10 @@ def power(x, n):
     return result;
 
 def sqrt(x):
+    if x == 0:
+        return 0
+    if x == 1:
+        return 1
     last_guess = x /2.0
     while True:
         guess = (last_guess + x/last_guess)/2
