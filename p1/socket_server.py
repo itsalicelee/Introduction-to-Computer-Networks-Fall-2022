@@ -7,25 +7,30 @@ def fact(x):
         return 1
     else:
         return (x * fact(x-1))
-    
-def ceil(n):
-    return int(-1 * n // 1 * -1)
 
-def floor(n):
-    return int(n // 1)
+def power(x, n):
+    result = 1
+    if (n > 0):
+        for i in range(n):
+            result *= x;
+    elif n < 0:
+        for i in range(n):
+            result /= x
+    return result;
 
 def sqrt(x):
-    last_guess= x/2.0
+    last_guess = x /2.0
     while True:
-        guess= (last_guess + x/last_guess)/2
-        if abs(guess - last_guess) < .0001: # example threshold
+        guess = (last_guess + x/last_guess)/2
+        if abs(guess - last_guess) < 0.0001:
             return guess
-        last_guess= guess
+        last_guess = guess
 
 def perm(n, k):
-    result = fact(n) / fact(n-k)
-    return result
+    return fact(n) / fact(n-k)
 
+def comb(n, k):
+    return fact(n) / (fact(k) * fact(n-k))
 
 def calculate(s):
     if '*' in s:
@@ -43,15 +48,15 @@ def calculate(s):
     elif '!' in s:
         s = s.split('!')
         return fact(int(s[0]))
-    elif 'ceil' in s:
+    elif 'power' in s:
         s = s.split()
-        return ceil(float(s[1]))
-    elif 'floor' in s:
-        s = s.split()
-        return floor(float(s[1]))
+        return power(float(s[1]), int(s[2]))
     elif 'sqrt' in s:
         s = s.split()
         return sqrt(float(s[1]))
+    elif 'comb' in s:
+        s = s.split()
+        return comb(int(s[1]), int(s[2]))
     elif 'perm' in s:
         s = s.split()
         n = int(s[1])

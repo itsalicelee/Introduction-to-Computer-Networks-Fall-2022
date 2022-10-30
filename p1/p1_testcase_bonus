@@ -1,10 +1,10 @@
 5!
 Y
-ceil 8.15
-Y
-floor 3.17
+power 2 10
 Y
 sqrt 36
+Y
+comb 5 3
 Y
 perm 5 3
 N
