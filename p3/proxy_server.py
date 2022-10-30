@@ -11,9 +11,11 @@ if len(sys.argv) <= 1:
 # Create a server socket, bind it to a port and start listening
 TCPServerSocket = socket(AF_INET, SOCK_STREAM)
 # TODO start
-HOST, PORT = str(sys.argv[1]), 4000
+# proxy server ip and port
+HOST, PORT = sys.argv[1], 8000
+print(HOST, PORT)
 TCPServerSocket.bind((HOST, PORT))
-TCPServerSocket.listen(0)
+TCPServerSocket.listen(100)
 # TODO end
 
 while True:
@@ -24,16 +26,16 @@ while True:
     # TODO end
     print('Received a connection from:', Addr)
 
-    # Receive request from the client
+    # Step1: Receive request from the client
     # TODO start
     RecvMessage = TCPClientSocket.recv(4096).decode()
     # TODO end
-    print("Receive request from client:", RecvMessage)
+    
 
     # Extract the filename from the given message
     if RecvMessage == "":
         RecvMessage = "/ /"
-    print(RecvMessage.split()[1])
+    print("Recv Message: ", RecvMessage.split()[1])
     Filename = RecvMessage.split()[1].partition("/")[2]
     print("Filename:", Filename)
     FileExist = "false"
@@ -44,12 +46,13 @@ while True:
         # Check whether the file exist in the cache
         f = open(FileToUse[1:], "r")
         DataInFile = f.readlines()
+        f.close()
         FileExist = "true"
 
         # Proxy Server finds the file (cache hit) and generates a response message
         # Send the file back to the client
         TCPClientSocket.send(("HTTP/1.1 200 OK\r\n").encode('utf-8'))
-        TCPClientSocket.send(("Content-Type: text/html; charset=UTF-8\n\n").encode('utf-8'))
+        TCPClientSocket.send(("Content-Type:text/html\r\n\r\n").encode('utf-8'))
         # TODO start
         for i in range(0, len(DataInFile)):
             TCPClientSocket.send(DataInFile[i].encode())
@@ -71,10 +74,7 @@ while True:
                 print("try to connect to the web_server")
                 # Connect the socket to the web server port
                 # TODO: start
-                SocketOnProxyServer.connect(("127.0.0.1", 5000))
-                
-
-                # FileToUse = "127.0.0.1:5000" + FileToUse
+                SocketOnProxyServer.connect(("127.0.0.1", 4047))
                 # TODO end
                 print("connected successfully")
 
@@ -88,6 +88,7 @@ while True:
                 # Read the response into buffer
                 # TODO start
                 buffer = FileObject.readlines()
+                print("Buffer: ", buffer)
                 # TODO end
 
                 # Create a new copy in the cache for the requested file
@@ -95,10 +96,13 @@ while True:
                 TmpFile = open(Filename, "w")
                 print("open the file successfully")
                 # TODO start
-                for line in buffer:
-                    TmpFile.write(line.encode())
-                    TCPClientSocket.send(line.encode())
-                
+                for i in range(len(buffer)):
+                    if i <= 1:
+                        TCPClientSocket.send(buffer[i].encode())
+                    else:
+                        TmpFile.write(buffer[i])
+                TmpFile.close()
+                print("Done")
                 # TODO end
             except:
                 print("Illegal request")
@@ -110,6 +114,7 @@ while True:
             TCPClientSocket.send(b"HTTP/1.1 404 Not Found\r\n")
             TCPClientSocket.send(b"Content-Type: text/html; charset=utf-8\r\n")
             TCPClientSocket.send(b"404 Not Found\r\n")
+            TCPClientSocket.send(b"\r\n")
             
             # TODO end
 
