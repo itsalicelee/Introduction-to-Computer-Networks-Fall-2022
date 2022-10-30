@@ -5,10 +5,13 @@ if len(sys.argv) <= 1:
     print('Usage : "python proxy_server.py server_ip"\n[server_ip : It is the IP address of proxy server')
     sys.exit(2)
 
+# Proxy server: 127.0.0.1:5000
+# http://127.0.0.1:5000/index.html
+
 # Create a server socket, bind it to a port and start listening
 TCPServerSocket = socket(AF_INET, SOCK_STREAM)
 # TODO start
-HOST, PORT = "127.0.0.1", 4047
+HOST, PORT = str(sys.argv[1]), 4000
 TCPServerSocket.bind((HOST, PORT))
 TCPServerSocket.listen(0)
 # TODO end
@@ -23,19 +26,19 @@ while True:
 
     # Receive request from the client
     # TODO start
-    RecvMessage = TCPClientSocket.recv(2048).decode('utf-8')
+    RecvMessage = TCPClientSocket.recv(4096).decode()
     # TODO end
-    print(RecvMessage)
+    print("Receive request from client:", RecvMessage)
 
     # Extract the filename from the given message
     if RecvMessage == "":
         RecvMessage = "/ /"
     print(RecvMessage.split()[1])
     Filename = RecvMessage.split()[1].partition("/")[2]
-    print(Filename)
+    print("Filename:", Filename)
     FileExist = "false"
     FileToUse = "/" + Filename
-    print(FileToUse)
+    print("FileToUse:", FileToUse)
 
     try:
         # Check whether the file exist in the cache
@@ -46,10 +49,11 @@ while True:
         # Proxy Server finds the file (cache hit) and generates a response message
         # Send the file back to the client
         TCPClientSocket.send(("HTTP/1.1 200 OK\r\n").encode('utf-8'))
-        TCPClientSocket.send(("Content-Type:text/html\r\n\r\n").encode('utf-8'))
+        TCPClientSocket.send(("Content-Type: text/html; charset=UTF-8\n\n").encode('utf-8'))
         # TODO start
         for i in range(0, len(DataInFile)):
-            TCPClientSocket.send(DataInFile[i].encode('utf-8'))
+            TCPClientSocket.send(DataInFile[i].encode())
+        TCPClientSocket.send("\r\n".encode())
         # TODO end
 
         print('Read from cache')
@@ -67,13 +71,10 @@ while True:
                 print("try to connect to the web_server")
                 # Connect the socket to the web server port
                 # TODO: start
-                proxy_ip = sys.argv[1]
-                try:
-                    proxy_port = sys.argv[2]
-                except:
-                    proxy_port = 80
-                SocketOnProxyServer.connect((proxy_ip, proxy_port))
-                SocketOnProxyServer.sendall(RecvMessage.encode('utf-8'))
+                SocketOnProxyServer.connect(("127.0.0.1", 5000))
+                
+
+                # FileToUse = "127.0.0.1:5000" + FileToUse
                 # TODO end
                 print("connected successfully")
 
@@ -86,14 +87,7 @@ while True:
 
                 # Read the response into buffer
                 # TODO start
-                buffer = b''
-                while 1:
-                    # receive data from web server
-                    data = SocketOnProxyServer.recv(8192)
-                    if (len(data) > 0):
-                        buffer += data
-                    else:
-                        break
+                buffer = FileObject.readlines()
                 # TODO end
 
                 # Create a new copy in the cache for the requested file
@@ -101,20 +95,21 @@ while True:
                 TmpFile = open(Filename, "w")
                 print("open the file successfully")
                 # TODO start
-                TCPClientSocket.send(buffer)
-                TmpFile.write(buffer)
-                TmpFile.close()
+                for line in buffer:
+                    TmpFile.write(line.encode())
+                    TCPClientSocket.send(line.encode())
                 
                 # TODO end
             except:
                 print("Illegal request")
-            SocketOnProxyServer.close()
+            
         else:
             # HTTP response message for file is not found
             # TODO start
-            TCPClientSocket.send(("HTTP/1.1 404 Not Found\r\n").encode('utf-8'))
-            TCPClientSocket.send(("Content-Type: text/html; charset=utf-8\r\n").encode('utf-8'))
-            TCPClientSocket.send(("404 Not Found\r\n").encode('utf-8'))
+            print("404 Not Found")
+            TCPClientSocket.send(b"HTTP/1.1 404 Not Found\r\n")
+            TCPClientSocket.send(b"Content-Type: text/html; charset=utf-8\r\n")
+            TCPClientSocket.send(b"404 Not Found\r\n")
             
             # TODO end
 

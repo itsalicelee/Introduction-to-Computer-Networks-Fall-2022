@@ -1,0 +1,27 @@
+The Client is running..
+Connect to 127.0.0.1, using port number 4047
+Received the message from server: Please input a question for calculation
+Question: 5!
+Answer: 120
+Do you wish to continue? (Y/N)
+Y
+Received the message from server: Please input a question for calculation
+Question: ceil 8.15
+Answer: 9
+Do you wish to continue? (Y/N)
+Y
+Received the message from server: Please input a question for calculation
+Question: floor 3.17
+Answer: 3
+Do you wish to continue? (Y/N)
+Y
+Received the message from server: Please input a question for calculation
+Question: sqrt 36
+Answer: 6.0
+Do you wish to continue? (Y/N)
+Y
+Received the message from server: Please input a question for calculation
+Question: perm 5 3
+Answer: 60.0
+Do you wish to continue? (Y/N)
+N

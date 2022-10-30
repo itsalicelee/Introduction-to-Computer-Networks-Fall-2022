@@ -1,7 +1,20 @@
 import socket
 import time
+import sys
 
-with open('./b07303024_p1_client_result.log', 'w') as logFile:
+filename = './b07303024_p1_client_result.log'
+testcase = './p1_testcase'
+if len(sys.argv) == 2:
+    if(sys.argv[1] == 'bonus'):
+        filename = './b07303024_p1_client_result_bonus.log'
+        testcase = './p1_testcase_bonus'
+    else:
+        print('[Bonus Usage] python3 socket_client.py bonus')
+
+
+
+
+with open(filename, 'w') as logFile:
     logFile.write("The Client is running..\n")
     logFile.flush()
 
@@ -14,7 +27,7 @@ with open('./b07303024_p1_client_result.log', 'w') as logFile:
     client_s.connect((HOST, PORT))
     # TODO end
 
-    Testcase = open('./p1_testcase', 'r')
+    Testcase = open(testcase, 'r')
     TestcaseContents = Testcase.readlines()
     Testcase.close()
 

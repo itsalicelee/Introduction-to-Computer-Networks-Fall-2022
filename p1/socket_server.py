@@ -1,5 +1,31 @@
 import socket
 from datetime import datetime
+import math
+
+def fact(x):
+    if x == 1:
+        return 1
+    else:
+        return (x * fact(x-1))
+    
+def ceil(n):
+    return int(-1 * n // 1 * -1)
+
+def floor(n):
+    return int(n // 1)
+
+def sqrt(x):
+    last_guess= x/2.0
+    while True:
+        guess= (last_guess + x/last_guess)/2
+        if abs(guess - last_guess) < .0001: # example threshold
+            return guess
+        last_guess= guess
+
+def perm(n, k):
+    result = fact(n) / fact(n-k)
+    return result
+
 
 def calculate(s):
     if '*' in s:
@@ -14,6 +40,24 @@ def calculate(s):
     elif '-' in s:
         s = s.split('-')
         return float(s[0])-float(s[1])
+    elif '!' in s:
+        s = s.split('!')
+        return fact(int(s[0]))
+    elif 'ceil' in s:
+        s = s.split()
+        return ceil(float(s[1]))
+    elif 'floor' in s:
+        s = s.split()
+        return floor(float(s[1]))
+    elif 'sqrt' in s:
+        s = s.split()
+        return sqrt(float(s[1]))
+    elif 'perm' in s:
+        s = s.split()
+        n = int(s[1])
+        k = int(s[2])
+        print(n, k)
+        return perm(n, k)
 
 
 with open('./server_log.txt', 'w') as logFile:
@@ -51,13 +95,13 @@ with open('./server_log.txt', 'w') as logFile:
                     # Ask if the client want to terminate the process
                     # Terminate the process or continue
                     # TODO start
-                    message = Client.recv(1000).decode()
+                    message = Client.recv(4096).decode()
                     Client.send(("Question: " + message + "\n").encode())
                     # logFile.write("Question: " + message + "\n")
                     result = calculate(message)
                     Client.send(("Answer: " + str(result) + "\n").encode())
                     Client.send("Do you wish to continue? (Y/N)".encode())
-                    message = Client.recv(1000).decode()
+                    message = Client.recv(4096).decode()
                     Client.send((message + "\n").encode())
                     logFile.write(message + "\n")
                     if(message == 'N'):
