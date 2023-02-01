@@ -113,8 +113,7 @@ while True:
             print("404 Not Found")
             TCPClientSocket.send(b"HTTP/1.1 404 Not Found\r\n")
             TCPClientSocket.send(b"Content-Type: text/html; charset=utf-8\r\n")
-            TCPClientSocket.send(b"404 Not Found\r\n")
-            TCPClientSocket.send(b"\r\n")
+            
             
             # TODO end
 
